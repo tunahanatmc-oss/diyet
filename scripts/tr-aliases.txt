@@ -1,0 +1,354 @@
+# Türkçe adlar | USDA eşleşmesi
+# Format: Türkçe ad; ek arama adı | !Tam USDA açıklaması   veya   alt;metin;parçaları (hepsi geçmeli)   veya   fdc_id
+# Tahıllar ve ekmek
+Pirinç, beyaz, uzun taneli, çiğ; pirinç; pirinc | !Rice, white, long-grain, regular, raw, enriched
+Pirinç, beyaz, haşlanmış; pilav; pirinç pilavı | !Rice, white, long-grain, regular, enriched, cooked
+Pirinç, beyaz, orta taneli, çiğ; baldo pirinç; osmancık pirinç | !Rice, white, medium-grain, raw, enriched
+Pirinç, beyaz, orta taneli, haşlanmış | !Rice, white, medium-grain, enriched, cooked
+Pirinç, esmer, çiğ; esmer pirinç | 169703
+Pirinç, esmer, haşlanmış | 169704
+Bulgur, kuru; bulgur | !Bulgur, dry
+Bulgur, haşlanmış; bulgur pilavı | !Bulgur, cooked
+Makarna, kuru; makarna; spagetti | !Pasta, dry, enriched
+Makarna, haşlanmış | pasta, cooked, enriched, without added salt
+Makarna, tam buğday, kuru | pasta, whole-wheat, dry
+Makarna, tam buğday, haşlanmış | pasta, whole-wheat, cooked
+Şehriye, kuru; tel şehriye | noodles, egg, dry, enriched
+Yulaf ezmesi; yulaf | cereals, oats, regular and quick, not fortified, dry
+Yulaf lapası (suyla pişmiş) | 173905
+Beyaz ekmek; ekmek; francala | 174924
+Tam buğday ekmeği; kepekli ekmek | bread, whole-wheat, commercially prepared
+Çavdar ekmeği | !Bread, rye
+Çok tahıllı ekmek | bread, multi-grain
+Lavaş; tortilla | tortillas, ready-to-bake or -fry, flour
+Pita ekmeği | bread, pita, white, enriched
+Galeta; kızarmış ekmek | !Bread, white, commercially prepared, toasted
+Buğday unu; un | wheat flour, white, all-purpose, enriched, bleached
+Tam buğday unu | wheat flour, whole-grain
+Mısır unu | cornmeal, whole-grain, yellow
+Mısır nişastası; nişasta | !Cornstarch
+İrmik | !Semolina, enriched
+Kinoa, çiğ; kinoa | !Quinoa, uncooked
+Kinoa, haşlanmış | !Quinoa, cooked
+Kuskus, kuru; kuskus | couscous, dry
+Kuskus, pişmiş | couscous, cooked
+Karabuğday | buckwheat groats, roasted, dry
+Arpa, inci, çiğ; arpa | barley, pearled, raw
+Patlamış mısır | snacks, popcorn, air-popped
+Kraker | crackers, standard snack-type, regular
+Galeta unu | bread, crumbs, dry, grated, plain
+# Baklagiller
+Kırmızı mercimek, kuru; kırmızı mercimek; mercimek | lentils, pink or red, raw
+Yeşil mercimek, kuru; yeşil mercimek | !Lentils, raw
+Mercimek, haşlanmış | lentils, mature seeds, cooked, boiled, without salt
+Nohut, kuru; nohut | chickpeas (garbanzo beans, bengal gram), mature seeds, raw
+Nohut, haşlanmış | chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt
+Nohut, konserve | chickpeas (garbanzo beans, bengal gram), mature seeds, canned, drained
+Kuru fasulye, kuru; kuru fasulye | beans, white, mature seeds, raw
+Kuru fasulye, haşlanmış | beans, white, mature seeds, cooked, boiled, without salt
+Barbunya, kuru; barbunya | beans, cranberry (roman), mature seeds, raw
+Barbunya, haşlanmış | beans, cranberry (roman), mature seeds, cooked, boiled, without salt
+Börülce, kuru; börülce | cowpeas, common (blackeyes, crowder, southern), mature seeds, raw
+Kuru bakla | broadbeans (fava beans), mature seeds, raw
+Bakla, taze | broadbeans, immature seeds, raw
+Siyah fasulye, kuru | beans, black, mature seeds, raw
+Siyah fasulye, haşlanmış | beans, black, mature seeds, cooked, boiled, without salt
+Kırmızı fasulye, kuru | beans, kidney, red, mature seeds, raw
+Kırmızı fasulye, haşlanmış | beans, kidney, red, mature seeds, cooked, boiled, without salt
+Bezelye, çiğ; bezelye | !Peas, green, raw
+Bezelye, dondurulmuş | peas, green, frozen, unprepared
+Bezelye, haşlanmış | peas, green, frozen, cooked, boiled, drained, without salt
+Soya fasulyesi | soybeans, mature seeds, raw
+Edamame | edamame, frozen, unprepared
+Humus | hummus, commercial
+Tofu | tofu, raw, firm, prepared with calcium sulfate
+Yer fıstığı ezmesi; fıstık ezmesi | peanut butter, smooth style, without salt
+# Sebzeler (çiğ)
+Domates; domates, çiğ | tomatoes, red, ripe, raw, year round average
+Domates, çeri / grape; çeri domates | 321360
+Salatalık; hıyar | cucumber, with peel, raw
+Yeşil biber; dolmalık biber | peppers, sweet, green, raw
+Kırmızı biber, tatlı; kapya biber | peppers, sweet, red, raw
+Sarı biber | peppers, sweet, yellow, raw
+Acı biber, yeşil; sivri biber | peppers, hot chili, green, raw
+Acı biber, kırmızı | peppers, hot chili, red, raw
+Kuru soğan; soğan | !Onions, raw
+Taze soğan | onions, spring or scallions (includes tops and bulb), raw
+Kırmızı soğan | onions, red, raw
+Sarımsak | garlic, raw
+Havuç; havuç, çiğ | !Carrots, raw
+Patates, çiğ; patates | potatoes, flesh and skin, raw
+Tatlı patates, çiğ; tatlı patates | sweet potato, raw, unprepared
+Patlıcan, çiğ; patlıcan | eggplant, raw
+Kabak, çiğ; sakız kabağı; kabak | squash, summer, zucchini, includes skin, raw
+Bal kabağı, çiğ; bal kabağı | !Pumpkin, raw
+Ispanak, çiğ; ıspanak | !Spinach, raw
+Marul; marul, göbek | lettuce, cos or romaine, raw
+Aysberg marul | lettuce, iceberg (includes crisphead types), raw
+Kıvırcık marul | lettuce, green leaf, raw
+Roka | arugula, raw
+Maydanoz | parsley, fresh
+Dereotu | dill weed, fresh
+Taze nane | spearmint, fresh
+Fesleğen, taze | basil, fresh
+Brokoli, çiğ; brokoli | !Broccoli, raw
+Karnabahar, çiğ; karnabahar | !Cauliflower, raw
+Beyaz lahana; lahana | !Cabbage, raw
+Kırmızı lahana; mor lahana | cabbage, red, raw
+Brüksel lahanası | brussels sprouts, raw
+Kara lahana | collards, raw
+Pırasa | leeks, (bulb and lower leaf-portion), raw
+Kereviz sapı; sap kereviz | celery, raw
+Kereviz kökü; kereviz | celeriac, raw
+Pancar; kırmızı pancar | beets, raw
+Turp, kırmızı; turp | radishes, raw
+Mantar, kültür; mantar | mushrooms, white, raw
+İstiridye mantarı | mushrooms, oyster, raw
+Taze mısır; mısır | corn, sweet, yellow, raw
+Taze fasulye, çiğ; taze fasulye | beans, snap, green, raw
+Bamya, çiğ; bamya | okra, raw
+Enginar, çiğ; enginar | artichokes, (globe or french), raw
+Kuşkonmaz | asparagus, raw
+Avokado | avocados, raw, all commercial varieties
+Semizotu | purslane, raw
+Pazı | chard, swiss, raw
+Lahana turşusu | sauerkraut, canned, solids and liquids
+Siyah zeytin | olives, ripe, canned (small-extra large)
+Yeşil zeytin | olives, pickled, canned or bottled, green
+Domates salçası; salça | tomato products, canned, paste, without salt added
+Domates, konserve; konserve domates | tomatoes, red, ripe, canned, packed in tomato juice
+Domates sosu | tomato products, canned, sauce
+Hindiba; frenk salatası | chicory greens, raw
+Su teresi; tere | watercress, raw
+Zencefil, taze | ginger root, raw
+Şalgam | turnips, raw
+# Sebzeler (pişmiş)
+Patates, haşlanmış | potatoes, boiled, cooked in skin, flesh, without salt
+Patates, fırında | potatoes, baked, flesh and skin, without salt
+Patates kızartması | 169264
+Patates püresi | potatoes, mashed, home-prepared, whole milk and butter added
+Tatlı patates, fırında | sweet potato, cooked, baked in skin, flesh, without salt
+Brokoli, haşlanmış | broccoli, cooked, boiled, drained, without salt
+Karnabahar, haşlanmış | cauliflower, cooked, boiled, drained, without salt
+Ispanak, haşlanmış | spinach, cooked, boiled, drained, without salt
+Havuç, haşlanmış | carrots, cooked, boiled, drained, without salt
+Kabak, haşlanmış | squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt
+Patlıcan, haşlanmış | eggplant, cooked, boiled, drained, without salt
+Taze fasulye, haşlanmış | beans, snap, green, cooked, boiled, drained, without salt
+Bamya, haşlanmış | okra, cooked, boiled, drained, without salt
+Lahana, haşlanmış | 169976
+Pırasa, haşlanmış | 168426
+Mantar, sote | mushrooms, white, stir-fried
+Mantar, haşlanmış | mushrooms, white, cooked, boiled, drained, without salt
+Mısır, haşlanmış | corn, sweet, yellow, cooked, boiled, drained, without salt
+Bal kabağı, haşlanmış | pumpkin, cooked, boiled, drained, without salt
+Pancar, haşlanmış | beets, cooked, boiled, drained
+Soğan, haşlanmış | onions, cooked, boiled, drained, without salt
+Brüksel lahanası, haşlanmış | brussels sprouts, cooked, boiled, drained, without salt
+Enginar, haşlanmış | artichokes, (globe or french), cooked, boiled, drained, without salt
+# Meyveler
+Elma; elma, kabuklu | apples, raw, with skin (includes foods for usda's food distribution program)
+Elma, kabuksuz | apples, raw, without skin
+Armut | !Pears, raw
+Muz | !Bananas, raw
+Portakal | oranges, raw, all commercial varieties
+Mandalina | tangerines, (mandarin oranges), raw
+Limon | lemons, raw, without peel
+Greyfurt | grapefruit, raw, pink and red, all areas
+Çilek | strawberries, raw
+Kiraz | cherries, sweet, raw
+Vişne | cherries, sour, red, raw
+Üzüm | grapes, red or green (european type, such as thompson seedless), raw
+Karpuz | watermelon, raw
+Kavun | melons, cantaloupe, raw
+Kavun, kış | melons, honeydew, raw
+Kayısı | !Apricots, raw
+Şeftali | !Peaches, yellow, raw
+Nektarin | nectarines, raw
+Erik | !Plums, raw
+İncir | !Figs, raw
+Kuru incir | figs, dried, uncooked
+Kuru kayısı | apricots, dried, sulfured, uncooked
+Kuru üzüm | 168165
+Hurma, medjool; hurma | dates, medjool
+Hurma, deglet noor | dates, deglet noor
+Nar | pomegranates, raw
+Kivi | kiwifruit, green, raw
+Ananas | pineapple, raw, all varieties
+Mango | mangos, raw
+Yaban mersini | blueberries, raw
+Ahududu; frambuaz | raspberries, raw
+Böğürtlen | blackberries, raw
+Dut | mulberries, raw
+Ayva | quinces, raw
+Trabzon hurması; cennet elması | persimmons, japanese, raw
+Kuru erik | plums, dried (prunes), uncooked
+Kızılcık, kuru | cranberries, dried, sweetened
+Portakal suyu (taze) | orange juice, raw
+Elma suyu | apple juice, canned or bottled, unsweetened, without added ascorbic acid
+Limon suyu | lemon juice, raw
+Nar suyu | pomegranate juice, bottled
+Greyfurt suyu | grapefruit juice, pink, raw
+Hindistan cevizi | nuts, coconut meat, raw
+Hindistan cevizi, kurutulmuş | nuts, coconut meat, dried (desiccated), not sweetened
+# Kuruyemiş ve tohumlar
+Badem | nuts, almonds
+Ceviz | nuts, walnuts, english
+Fındık | nuts, hazelnuts or filberts
+Antep fıstığı, çiğ; antep fıstığı | nuts, pistachio nuts, raw
+Antep fıstığı, kavrulmuş | nuts, pistachio nuts, dry roasted, without salt added
+Yer fıstığı, çiğ; yer fıstığı | peanuts, all types, raw
+Yer fıstığı, kavrulmuş | peanuts, all types, dry-roasted, without salt
+Kaju | nuts, cashew nuts, raw
+Çam fıstığı | nuts, pine nuts, dried
+Ay çekirdeği içi | seeds, sunflower seed kernels, dried
+Kabak çekirdeği içi | seeds, pumpkin and squash seed kernels, dried
+Susam | seeds, sesame seeds, whole, dried
+Tahin | seeds, sesame butter, tahini, from roasted and toasted kernels
+Keten tohumu | seeds, flaxseed
+Chia tohumu | seeds, chia seeds, dried
+Kestane, kavrulmuş | nuts, chestnuts, european, roasted
+Badem ezmesi | nuts, almond butter, plain, without salt added
+# Süt ürünleri ve yumurta
+Süt, tam yağlı; süt | milk, whole, 3.25% milkfat, with added vitamin d
+Süt, yarım yağlı (%2) | milk, reduced fat, fluid, 2% milkfat, with added vitamin a and vitamin d
+Süt, az yağlı (%1) | milk, lowfat, fluid, 1% milkfat, with added vitamin a and vitamin d
+Süt, yağsız | milk, nonfat, fluid, with added vitamin a and vitamin d (fat free or skim)
+Yoğurt, tam yağlı; yoğurt | yogurt, plain, whole milk
+Yoğurt, az yağlı | yogurt, plain, low fat
+Yoğurt, yağsız | yogurt, plain, skim milk
+Süzme yoğurt, tam yağlı; süzme yoğurt | yogurt, greek, plain, whole milk
+Süzme yoğurt, yağsız | yogurt, greek, plain, nonfat
+Kefir | kefir, lowfat, plain
+Beyaz peynir (feta); feta peyniri | !Cheese, feta
+Çedar peyniri | !Cheese, cheddar
+Mozzarella peyniri | cheese, mozzarella, whole milk
+Parmesan peyniri | cheese, parmesan, grated
+Krem peynir | !Cheese, cream
+Cottage peyniri; süzme peynir | cheese, cottage, lowfat, 2% milkfat
+Ricotta peyniri | cheese, ricotta, whole milk
+Gravyer peyniri | !Cheese, gruyere
+Keçi peyniri | cheese, goat, soft type
+Tereyağı; tereyağı, tuzlu | butter, salted
+Tereyağı, tuzsuz | butter, without salt
+Krema, çırpma | cream, fluid, heavy whipping
+Ekşi krema | cream, sour, cultured
+Dondurma, vanilyalı; dondurma | ice creams, vanilla
+Yumurta, çiğ; yumurta | egg, whole, raw, fresh
+Yumurta, haşlanmış; haşlanmış yumurta | egg, whole, cooked, hard-boiled
+Yumurta, sahanda; sahanda yumurta | egg, whole, cooked, fried
+Yumurta, çırpılmış (scrambled); omlet | egg, whole, cooked, scrambled
+Yumurta, poşe | egg, whole, cooked, poached
+Yumurta beyazı | egg, white, raw, fresh
+Yumurta sarısı | egg, yolk, raw, fresh
+Süt tozu, yağsız | milk, dry, nonfat, regular, without added vitamin a and vitamin d
+# Et, tavuk, balık
+Tavuk göğsü, çiğ; tavuk göğsü | 2646170
+Tavuk göğsü, fırında | chicken, broilers or fryers, breast, meat only, cooked, roasted
+Tavuk göğsü, ızgara | chicken, broiler or fryers, breast, skinless, boneless, meat only, cooked, grilled
+Tavuk göğsü, derili, çiğ | chicken, broilers or fryers, breast, meat and skin, raw
+Tavuk but, çiğ; tavuk but; tavuk baget | 2646171
+Tavuk but, fırında | chicken, broilers or fryers, thigh, meat only, cooked, roasted
+Tavuk but, derili, çiğ | chicken, broilers or fryers, thigh, meat and skin, raw
+Tavuk kanat, çiğ; tavuk kanat | chicken, broilers or fryers, wing, meat and skin, raw
+Tavuk kanat, fırında | chicken, broilers or fryers, wing, meat and skin, cooked, roasted
+Tavuk ciğeri | chicken, liver, all classes, raw
+Hindi göğsü, çiğ; hindi | turkey, whole, breast, meat only, raw
+Hindi kıyma, çiğ | turkey, ground, raw
+Dana kıyma %85 yağsız, çiğ; dana kıyma; kıyma | beef, ground, 85% lean meat / 15% fat, raw
+Dana kıyma %85 yağsız, pişmiş | beef, ground, 85% lean meat / 15% fat, crumbles, cooked, pan-browned
+Dana kıyma %80 yağsız, çiğ; yağlı kıyma | beef, ground, 80% lean meat / 20% fat, raw
+Dana kıyma %90 yağsız, çiğ; az yağlı kıyma | beef, ground, 90% lean meat / 10% fat, raw
+Dana kıyma %95 yağsız, çiğ | beef, ground, 95% lean meat / 5% fat, raw
+Köfte (dana kıyma %85, ızgara) | beef, ground, 85% lean meat / 15% fat, patty, cooked, broiled
+Dana bonfile, çiğ; bonfile | beef, tenderloin, steak, separable lean only, trimmed to 1/8" fat, all grades, raw
+Dana antrikot, çiğ; antrikot | beef, rib eye
+Dana kuşbaşı, çiğ; kuşbaşı | 171206
+Dana ciğer, çiğ; ciğer | beef, variety meats and by-products, liver, raw
+Dana ciğer, tavada | beef, variety meats and by-products, liver, cooked, pan-fried
+Kuzu kıyma, çiğ; kuzu kıyma | lamb, ground, raw
+Dana dil | beef, variety meats and by-products, tongue, raw
+Sosis (dana) | frankfurter, beef, unheated
+Salam | salami, cooked, beef
+Somon, çiftlik, çiğ; somon | fish, salmon, atlantic, farmed, raw
+Somon, çiftlik, pişmiş | fish, salmon, atlantic, farmed, cooked, dry heat
+Somon, füme | fish, salmon, chinook, smoked
+Levrek, çiğ; levrek | fish, sea bass, mixed species, raw
+Levrek, pişmiş | fish, sea bass, mixed species, cooked, dry heat
+Hamsi, çiğ; hamsi | fish, anchovy, european, raw
+Sardalya, konserve | fish, sardine, atlantic, canned in oil, drained solids with bone
+Uskumru, çiğ; uskumru | fish, mackerel, atlantic, raw
+Uskumru, pişmiş | fish, mackerel, atlantic, cooked, dry heat
+Ton balığı, konserve, suda; ton balığı | fish, tuna, light, canned in water, drained solids
+Ton balığı, konserve, yağda | fish, tuna, light, canned in oil, drained solids
+Ton balığı, taze, çiğ | fish, tuna, fresh, yellowfin, raw
+Alabalık, çiğ; alabalık | fish, trout, rainbow, farmed, raw
+Alabalık, pişmiş | fish, trout, rainbow, farmed, cooked, dry heat
+Mezgit, çiğ; mezgit | fish, whiting, mixed species, raw
+Lüfer, çiğ; lüfer | fish, bluefish, raw
+Morina, çiğ; morina | fish, cod, atlantic, raw
+Kalkan | fish, turbot, european, raw
+Dil balığı | fish, flatfish (flounder and sole species), raw
+Karides, çiğ; karides | crustaceans, shrimp, raw
+Karides, haşlanmış | crustaceans, shrimp, cooked
+Midye, çiğ; midye | mollusks, mussel, blue, raw
+Midye, haşlanmış | mollusks, mussel, blue, cooked, moist heat
+Kalamar, çiğ; kalamar | mollusks, squid, mixed species, raw
+Kalamar, kızartma | mollusks, squid, mixed species, cooked, fried
+Ahtapot | mollusks, octopus, common, raw
+# Yağlar
+Zeytinyağı | oil, olive, salad or cooking
+Ayçiçek yağı | oil, sunflower, linoleic, (approx. 65%)
+Mısır yağı | oil, corn, industrial and retail, all purpose salad or cooking
+Fındık yağı | oil, hazelnut
+Kanola yağı | oil, canola
+Susam yağı | oil, sesame, salad or cooking
+Hindistan cevizi yağı | oil, coconut
+Margarin | margarine, regular, 80% fat, composite, stick, with salt
+Mayonez | salad dressing, mayonnaise, regular
+# Tatlılar ve şekerler
+Şeker, toz; şeker | sugars, granulated
+Esmer şeker | sugars, brown
+Pudra şekeri | sugars, powdered
+Bal | !Honey
+Reçel | jams and preserves
+Bitter çikolata (%70-85) | chocolate, dark, 70-85% cacao solids
+Bitter çikolata (%60-69) | chocolate, dark, 60-69% cacao solids
+Sütlü çikolata | candies, milk chocolate
+Kakao tozu | cocoa, dry powder, unsweetened
+Akçaağaç şurubu | syrups, maple
+Melas | !Molasses
+# İçecekler
+Çay, demlenmiş; çay | beverages, tea, black, brewed, prepared with tap water
+Yeşil çay | beverages, tea, green, brewed, regular
+Kahve, filtre; kahve | beverages, coffee, brewed, prepared with tap water
+Espresso | beverages, coffee, brewed, espresso, restaurant-prepared
+Su, musluk; su | beverages, water, tap, drinking
+Kola | beverages, carbonated, cola, regular
+Soda; maden suyu | beverages, carbonated, club soda
+Bira | alcoholic beverage, beer, regular, all
+Kırmızı şarap; şarap | alcoholic beverage, wine, table, red
+Beyaz şarap | alcoholic beverage, wine, table, white
+Rakı benzeri distile içki (80 proof) | alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 80 proof
+Bitkisel süt, badem | beverages, almond milk, unsweetened, shelf stable
+Soya sütü | soymilk, original and vanilla, unfortified
+# Baharat ve soslar
+Tuz | salt, table
+Karabiber | spices, pepper, black
+Kırmızı toz biber; pul biber | spices, pepper, red or cayenne
+Paprika (tatlı toz biber) | spices, paprika
+Kimyon | spices, cumin seed
+Nane, kuru | spearmint, dried
+Kekik, kuru | spices, thyme, dried
+Tarçın | spices, cinnamon, ground
+Zerdeçal | spices, turmeric, ground
+Zencefil, toz | spices, ginger, ground
+Ketçap | !Catsup
+Hardal | mustard, prepared, yellow
+Elma sirkesi; sirke | vinegar, cider
+Üzüm sirkesi, kırmızı | vinegar, red wine
+Balzamik sirke | vinegar, balsamic
+Soya sosu | soy sauce made from soy and wheat (shoyu)
+Kabartma tozu | leavening agents, baking powder, double-acting, sodium aluminum sulfate
+Kuru maya; maya | leavening agents, yeast, baker's, active dry
+Jelatin, toz | gelatins, dry powder, unsweetened

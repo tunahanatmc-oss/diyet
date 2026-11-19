@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Diyet",
+  "version": "0.1.0",
+  "identifier": "com.diyet.app",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Beslenme Zekâsı",
+        "width": 1280,
+        "height": 840,
+        "minWidth": 380,
+        "minHeight": 600,
+        "resizable": true,
+        "dragDropEnabled": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' ipc: http://ipc.localhost https://world.openfoodfacts.org https://generativelanguage.googleapis.com; media-src 'self' blob: mediastream:; worker-src 'self' blob:"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "msi"],
+    "category": "HealthcareAndFitness",
+    "shortDescription": "Kişisel beslenme ve kilo takibi",
+    "longDescription": "Çevrimdışı çalışan, verileri yalnızca bilgisayarınızda tutan kişisel beslenme, tarif ve kilo takibi uygulaması.",
+    "copyright": "Kişisel kullanım",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": { "type": "downloadBootstrapper" },
+      "nsis": { "languages": ["Turkish", "English"], "displayLanguageSelector": false, "installMode": "currentUser" }
+    }
+  }
+}
