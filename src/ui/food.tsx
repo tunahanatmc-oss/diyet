@@ -4,7 +4,7 @@ import type { FoodView } from '../data/reference';
 import { PREP_TR } from '../data/reference';
 import * as repo from '../data/repo';
 import type { NutrientProfile, ValueType } from '../engine';
-import { EngineError, weakest } from '../engine';
+import { EngineError, weakest, queryHasPrep, queryHasMilk } from '../engine';
 import { Badge, fmt, fmtN, Seg, NumberInput, VT_TR } from './kit';
 import { I } from './icons';
 
@@ -24,12 +24,18 @@ export function FoodRow({ f, onClick, right }: { f: FoodView; onClick?: () => vo
 
 export type PickTab = 'search' | 'recent' | 'fav' | 'mine' | 'recipes';
 export function FoodPicker({ onPick, onPickRecipe, tabs = ['search', 'recent', 'fav', 'mine', 'recipes'], autoFocus, placeholder }: {
-  onPick: (f: FoodView, amount?: number, unit?: string) => void; onPickRecipe?: (id: number) => void; tabs?: PickTab[]; autoFocus?: boolean; placeholder?: string;
+  onPick: (f: FoodView, amount?: number, unit?: string, opts?: { askPrep?: boolean; askMilk?: boolean }) => void; onPickRecipe?: (id: number) => void; tabs?: PickTab[]; autoFocus?: boolean; placeholder?: string;
 }) {
   const { sv, version } = useApp();
   const [qs, setQ] = useState('');
   const [tab, setTab] = useState<PickTab>(tabs.includes('recent') ? 'recent' : 'search');
-  const results = useMemo(() => (qs.trim().length >= 2 ? sv.search(qs, 40) : []), [qs, sv, version]);
+  const { results, partial, note } = useMemo(() => {
+    if (qs.trim().length < 2) return { results: [] as FoodView[], partial: false, note: null as string | null };
+    const r = sv.search(qs, 40); return { results: r, partial: sv.ref.lastPartial, note: sv.ref.lastNote };
+  }, [qs, sv, version]);
+  // no preparation word typed (e.g. "tavuk göğsü") -> the log sheet asks how it was prepared
+  const askPrep = !queryHasPrep(qs);
+  const askMilk = !queryHasMilk(qs);
   const labels: Record<PickTab, string> = { search: 'Arama', recent: 'Son', fav: 'Favoriler', mine: 'Besinlerim', recipes: 'Tarifler' };
   const showing = qs.trim().length >= 2 ? 'search' : tab;
   return (
@@ -37,7 +43,8 @@ export function FoodPicker({ onPick, onPickRecipe, tabs = ['search', 'recent', '
       <div className="search"><I.search /><input className="input" autoFocus={autoFocus} placeholder={placeholder ?? 'Besin ara… (ör. pirinç, tavuk göğsü, yoğurt)'} value={qs} onChange={e => setQ(e.target.value)} data-search /></div>
       {qs.trim().length < 2 && tabs.length > 1 && <Seg value={tab} options={tabs.filter(t => t !== 'search').map(t => [t, labels[t]] as [PickTab, string])} onChange={setTab} />}
       <div className="list">
-        {showing === 'search' && (results.length ? results.map(f => <FoodRow key={f.kind + f.id} f={f} onClick={() => onPick(f)} />) : qs.trim().length >= 2 ? <div className="empty">Sonuç yok. “Besinler” bölümünden kendi besininizi ekleyebilirsiniz.</div> : <div className="empty">En az 2 harf yazın.</div>)}
+        {showing === 'search' && partial && (note || results.length > 0) && <div className="warn small" data-partial>{note ?? `“${qs.trim()}” için tüm kelimelerle eşleşen besin bulunamadı. En yakın sonuçlar:`}</div>}
+        {showing === 'search' && (results.length ? results.map(f => <FoodRow key={f.kind + f.id} f={f} onClick={() => onPick(f, undefined, undefined, { askPrep, askMilk })} />) : qs.trim().length >= 2 ? <div className="empty">Sonuç yok. “Besinler” bölümünden kendi besininizi ekleyebilirsiniz.</div> : <div className="empty">En az 2 harf yazın.</div>)}
         {showing === 'recent' && <Recent onPick={onPick} onPickRecipe={onPickRecipe} />}
         {showing === 'fav' && <Favs onPick={onPick} onPickRecipe={onPickRecipe} />}
         {showing === 'mine' && (repo.listCustomFoods(sv.db).map(f => <FoodRow key={f.id} f={f} onClick={() => onPick(f)} />).concat().length ? repo.listCustomFoods(sv.db).map(f => <FoodRow key={f.id} f={f} onClick={() => onPick(f)} />) : <div className="empty">Henüz kendi besininiz yok.</div>)}

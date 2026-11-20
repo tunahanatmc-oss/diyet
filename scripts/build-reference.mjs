@@ -4,7 +4,10 @@
  * (Foundation Foods + SR Legacy; public domain / CC0).
  *
  * Usage:
- *   node scripts/build-reference.mjs <sr_legacy_csv_dir> <foundation_csv_dir>
+ *   node scripts/build-reference.mjs <sr_legacy_csv_dir> <foundation_csv_dir> [FOOD_DES.txt]
+ * FOOD_DES.txt (SR28 ASCII, https://www.ars.usda.gov/ARSUserFiles/80400525/Data/SR/SR28/asc/FOOD_DES.txt) supplies the
+ * refuse % (e.g. egg shell 12 %), which the FDC CSV export does not carry. Optional; looked up next to srDir when omitted.
+ * [fnddsDir] = FoodData Central "Survey (FNDDS)" CSV folder; only coffee drinks are taken (latte, cappuccino, mocha, ...).
  * Download from https://fdc.nal.usda.gov/download-datasets (CSV versions), unzip, pass the folders.
  *
  * Rules: no value is invented. A nutrient row absent in USDA => null ("missing"), never 0.
@@ -15,7 +18,7 @@ import readline from 'node:readline';
 import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const [srDir, fdDir] = process.argv.slice(2);
+const [srDir, fdDir, foodDesArg, fnddsArg] = process.argv.slice(2);
 if (!srDir || !fdDir) { console.error('usage: build-reference.mjs <srDir> <foundationDir>'); process.exit(1); }
 const OUT = path.join(here, '..', 'public', 'data', 'reference.json');
 
@@ -83,21 +86,41 @@ await readCsv(path.join(fdDir, 'food.csv'), r => {
   foods.set(r.fdc_id, { id: +r.fdc_id, src: 'F', desc: r.description, cat: +r.food_category_id || null, v: {}, o: [] });
 });
 
-async function loadNutrients(dir) {
+// FNDDS (Survey) coffee drinks: public domain, values calculated from SR recipes -> 'sourced'
+const fnddsDir = fnddsArg || [path.join(srDir, '..', '..', 'fndds')].map(d => fs.existsSync(d) ? path.join(d, fs.readdirSync(d).find(x => /survey_food_csv/.test(x)) ?? '') : '').find(d => d && fs.existsSync(path.join(d, 'food.csv')));
+const COFFEE = /^(Coffee, (NS as to type|brewed|Turkish|espresso|macchiato|cafe con leche|Latte|Cafe Mocha|Iced Latte|Iced Cafe Mocha|Cappuccino|instant, reconstituted|instant, pre-|pre-lightened|pre-sweetened|bottled\/canned)|Iced Coffee|Frozen (mocha )?coffee drink)/;
+let fnddsVersion = null;
+if (fnddsDir) {
+  fnddsVersion = path.basename(fnddsDir).match(/\d{4}-\d{2}-\d{2}/)?.[0];
+  await readCsv(path.join(fnddsDir, 'food.csv'), r => {
+    const d = r.description;
+    if (!COFFEE.test(d) || /creamer|cake|not reconstituted|substitute|chicory/i.test(d)) return;
+    if (/decaffeinated/i.test(d) && !/^Coffee, (brewed|espresso), decaffeinated$/.test(d)) return; // keep the list small
+    foods.set(r.fdc_id, { id: +r.fdc_id, src: 'N', desc: d, cat: null, v: {}, o: [] });
+  });
+}
+const nbrToId = new Map();
+
+async function loadNutrients(dir, byNumber = false) {
   await readCsv(path.join(dir, 'food_nutrient.csv'), r => {
     const f = foods.get(r.fdc_id); if (!f) return;
-    const m = idToIdx.get(+r.nutrient_id); if (!m) return;
+    const m = idToIdx.get(byNumber ? nbrToId.get(+r.nutrient_id) : +r.nutrient_id); if (!m) return;
     if (r.amount === '' || r.amount == null) return;
     const [idx, pr] = m; const prev = f.v[idx];
     if (prev && prev.pr <= pr) return;
     const code = derivCode.get(r.derivation_id);
-    let t = f.src === 'F' ? 'm' : (code && MEASURED_DERIV.has(code) ? 'm' : 's');
+    let t = f.src === 'F' ? 'm' : f.src === 'N' ? 's' : (code && MEASURED_DERIV.has(code) ? 'm' : 's');
     if (idx === 0 && +r.nutrient_id !== 1008) t = 's'; // energy calculated by Atwater in the source
     f.v[idx] = { a: +(+r.amount).toPrecision(4), t, pr };
   });
 }
 await loadNutrients(srDir);
 await loadNutrients(fdDir);
+if (fnddsDir) {
+  // FNDDS food_nutrient.nutrient_id holds the nutrient NUMBER (208 = energy), not the FDC nutrient id
+  await readCsv(path.join(fnddsDir, 'nutrient.csv'), r => nbrToId.set(+r.nutrient_nbr, +r.id));
+  await loadNutrients(fnddsDir, true);
+}
 
 // portions
 const units = new Map();
@@ -117,6 +140,32 @@ async function loadPortions(dir) {
 }
 await loadPortions(srDir);
 await loadPortions(fdDir);
+if (fnddsDir) {
+  // FNDDS: portion_description is the text ("1 small", "1 cup (8 fl oz)"); modifier is a numeric code -> ignored
+  await readCsv(path.join(fnddsDir, 'food_portion.csv'), r => {
+    const f = foods.get(r.fdc_id); if (!f || f.src !== 'N') return;
+    const g = +r.gram_weight; if (!(g > 0)) return;
+    const d = (r.portion_description || '').trim();
+    if (!d || /quantity not specified/i.test(d)) return;
+    const label = d.replace(/^1\s+/, '');
+    f.o.push([label.slice(0, 80), 1, normUnit(label), +g.toPrecision(4)]);
+  });
+}
+
+// refuse (inedible part) from SR28 FOOD_DES: ~NDB~^~FdGrp~^~Long_Desc~^...^~Ref_desc~^Refuse^...
+const foodDes = foodDesArg || [path.join(srDir, 'FOOD_DES.txt'), path.join(srDir, '..', 'FOOD_DES.txt'), path.join(srDir, '..', '..', 'FOOD_DES.txt')].find(f => fs.existsSync(f));
+let refuseCount = 0;
+if (foodDes && fs.existsSync(foodDes)) {
+  const ndbToFdc = new Map();
+  await readCsv(path.join(srDir, 'sr_legacy_food.csv'), r => ndbToFdc.set(String(+r.NDB_number), r.fdc_id));
+  for (const line of fs.readFileSync(foodDes, 'latin1').split(/\r?\n/)) {
+    if (!line) continue;
+    const c = line.split('^').map(x => x.replace(/^~|~$/g, ''));
+    const pct = +c[8]; if (!(pct > 0)) continue;
+    const f = foods.get(ndbToFdc.get(String(+c[0]))); if (!f) continue;
+    f.r = [pct, c[7] || '']; refuseCount++;
+  }
+}
 
 // prep state
 function prepState(desc) {
@@ -171,7 +220,14 @@ for (const f of foods.values()) {
   const o = { i: f.id, b: baseIdx.get(k), p: prepState(f.desc), e: f.desc, s: f.src, g: f.cat, v, q };
   if (f.tr) o.t = f.tr;
   if (f.note) o.n = f.note;
-  if (f.o.length) o.o = f.o.slice(0, 12);
+  if (f.r) o.r = f.r;
+  // keep every size-type portion (small/medium/large...) so the size picker never loses one to the cap
+  if (f.o.length) {
+    const SZ = /\b(small|medium|large|jumbo)\b/i;
+    const sized = new Set(f.o.filter(p => SZ.test(p[0].replace(/\([^)]*\)/g, ''))));
+    const restMax = Math.max(12 - sized.size, 6); let rest = 0;
+    o.o = f.o.filter(p => sized.has(p) || rest++ < restMax).slice(0, 24);
+  }
   out.push(o);
 }
 // checks (spec 7.5)
@@ -186,11 +242,12 @@ const meta = {
   version: 'reference-' + new Date().toISOString().slice(0, 7).replace('-', '.'),
   built: new Date().toISOString(),
   sources: [
+    ...(fnddsVersion ? [{ code: 'usda_fndds', name: 'USDA FoodData Central – Survey Foods (FNDDS, ' + fnddsVersion + '), coffee drinks', licence: 'Public domain (CC0 1.0)', url: 'https://fdc.nal.usda.gov/' }] : []),
     { code: 'usda_sr_legacy', name: 'USDA FoodData Central – SR Legacy (April 2018)', licence: 'Public domain (CC0 1.0)', url: 'https://fdc.nal.usda.gov/' },
     { code: 'usda_foundation', name: 'USDA FoodData Central – Foundation Foods (' + path.basename(fdDir).match(/\d{4}-\d{2}-\d{2}/)?.[0] + ')', licence: 'Public domain (CC0 1.0)', url: 'https://fdc.nal.usda.gov/' },
   ],
   credit: 'U.S. Department of Agriculture, Agricultural Research Service. FoodData Central. fdc.nal.usda.gov',
-  checks: { foods: out.length, noEnergy, negativeValues: neg, macroSumOver105: macroOver, cupPortionRows: cupRows, tbspPortionRows: tbspRows, turkishAliases: aliasCount, negativeCarbClampedToZero: clampedCarb, unresolvedAliases: unresolved.length },
+  checks: { foods: out.length, noEnergy, negativeValues: neg, macroSumOver105: macroOver, cupPortionRows: cupRows, tbspPortionRows: tbspRows, turkishAliases: aliasCount, negativeCarbClampedToZero: clampedCarb, unresolvedAliases: unresolved.length, refuseRows: refuseCount },
 };
 const nutrients = NUTRIENTS.map(([code, tr, en, unit, ids, core]) => ({ code, name_tr: tr, name_en: en, unit, usda: ids[0], core }));
 const groups = [...cats.entries()].map(([id, d]) => ({ id: +id, name_en: d }));

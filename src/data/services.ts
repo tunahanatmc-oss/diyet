@@ -33,7 +33,7 @@ export class Services {
     const u = [{ code: 'g', label: 'gram' }];
     for (const m of repo.measures(this.db)) u.push({ code: 'm:' + m.id, label: `${m.name_tr} (${m.ml} ml)` });
     const seen = new Set<string>();
-    for (const p of f.portions) if (['piece', 'slice', 'serving'].includes(p.unit) && !seen.has(p.unit + p.label)) {
+    for (const p of f.portions) if (['piece', 'slice', 'serving', 'other'].includes(p.unit) && !seen.has(p.unit + p.label)) {
       seen.add(p.unit + p.label); u.push({ code: 'p:' + f.portions.indexOf(p), label: `${p.label} (${p.gram_weight} g)` });
     }
     return u;

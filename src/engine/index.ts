@@ -11,3 +11,6 @@ export * from './adaptive';
 export * from './search';
 export * from './satiety';
 export * from './plan';
+export * from './sizes';
+export * from './eggs';
+export * from './drinks';

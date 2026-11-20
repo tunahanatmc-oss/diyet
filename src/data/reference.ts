@@ -1,11 +1,11 @@
 import type { NutrientProfile, PrepState, ValueType, Portion } from '../engine';
-import { normalize } from '../engine';
+import { normalize, parseQuery, scoreDoc, milkVariant, SEARCH_FALLBACK, type SearchDoc, type MilkType } from '../engine';
 
 export interface NutrientDef { code: string; name_tr: string; name_en: string; unit: string; usda: number; core: number }
-export interface RefFoodRaw { i: number; b: number; p: PrepState; e: string; s: 'F' | 'S'; g: number | null; v: (number | null)[]; q: string; t?: string[]; o?: [string, number, string, number][]; n?: string }
+export interface RefFoodRaw { i: number; b: number; p: PrepState; e: string; s: 'F' | 'S' | 'N'; g: number | null; v: (number | null)[]; q: string; t?: string[]; o?: [string, number, string, number][]; n?: string; r?: [number, string] }
 export interface ReferenceData { meta: any; nutrients: NutrientDef[]; groups: { id: number; name_en: string }[]; foods: RefFoodRaw[] }
 
-export type FoodSource = 'usda_foundation' | 'usda_sr_legacy' | 'user' | 'label' | 'off' | 'recipe' | 'turkomp_personal';
+export type FoodSource = 'usda_foundation' | 'usda_sr_legacy' | 'usda_fndds' | 'user' | 'label' | 'off' | 'recipe' | 'turkomp_personal';
 
 /** Unified food view used by the UI and services: reference (read-only) or custom (personal DB). */
 export interface FoodView {
@@ -26,6 +26,8 @@ export interface FoodView {
   waterLike: boolean;
   note?: string;
   barcode?: string;
+  /** inedible part of the food as purchased (USDA SR Legacy refuse), e.g. egg shell 12 % */
+  refuse?: { pct: number; desc: string };
 }
 
 export const PREP_TR: Record<string, string> = {
@@ -41,8 +43,14 @@ export class Reference {
   nutrients: NutrientDef[]; meta: any; groups: Map<number, string>;
   private raw: Map<number, RefFoodRaw> = new Map();
   private views: Map<number, FoodView> = new Map();
-  private keys: { id: number; key: string; tr: string; boost: number; exact: string[] }[] = [];
+  private docs: { id: number; d: SearchDoc }[] = [];
+  private descIdx: Map<string, number> = new Map();
+  /** true when the last search found no food matching every query word (only the nearest matches). */
+  lastPartial = false;
+  /** explanation shown with the results when USDA has no food by that name (e.g. americano). */
+  lastNote: string | null = null;
   private byBase: Map<number, number[]> = new Map();
+  private milkGroups: Map<string, { id: number; milk: MilkType }[]> = new Map();
 
   constructor(data: ReferenceData) {
     this.nutrients = data.nutrients; this.meta = data.meta;
@@ -50,9 +58,11 @@ export class Reference {
     for (const f of data.foods) {
       this.raw.set(f.i, f);
       const tr = (f.t ?? []).map(normalize).join(' ');
-      this.keys.push({ id: f.i, key: normalize((f.t ?? []).join(' ') + ' ' + f.e), tr, boost: (f.t ? 2 : 0) + (f.s === 'F' ? 0.3 : 0), exact: (f.t ?? []).map(normalize) });
+      this.docs.push({ id: f.i, d: { tr, en: normalize(f.e), prep: f.p, exact: (f.t ?? []).map(normalize), boost: (f.t ? 2 : 0) + (f.s === 'F' ? 0.3 : 0) } });
+      if (!this.descIdx.has(f.e.toLowerCase())) this.descIdx.set(f.e.toLowerCase(), f.i);
       if (!this.byBase.has(f.b)) this.byBase.set(f.b, []);
       this.byBase.get(f.b)!.push(f.i);
+      if (f.s === 'N') { const mv = milkVariant(f.e); if (!this.milkGroups.has(mv.key)) this.milkGroups.set(mv.key, []); this.milkGroups.get(mv.key)!.push({ id: f.i, milk: mv.milk }); }
     }
   }
   get size() { return this.raw.size; }
@@ -65,14 +75,16 @@ export class Reference {
     const f = this.raw.get(id); if (!f) return undefined;
     const per100: NutrientProfile = {};
     this.nutrients.forEach((n, i) => { const v = f.v[i]; per100[n.code] = v == null ? { value: null, type: 'missing' } : { value: v, type: QT[f.q[i]] ?? 'sourced' }; });
-    const src: FoodSource = f.s === 'F' ? 'usda_foundation' : 'usda_sr_legacy';
+    const src: FoodSource = f.s === 'F' ? 'usda_foundation' : f.s === 'N' ? 'usda_fndds' : 'usda_sr_legacy';
+    const srcLabel = f.s === 'F' ? 'USDA Foundation' : f.s === 'N' ? 'USDA FNDDS' : 'USDA SR Legacy';
     const view: FoodView = {
       id: f.i, kind: 'ref', name: f.t?.[0] ?? f.e, name_en: f.e, aliases: f.t ?? [], prep: f.p, base: f.b, source: src,
-      sourceLabel: f.s === 'F' ? 'USDA Foundation' : 'USDA SR Legacy', sourceId: String(f.i), group: f.g ? this.groups.get(f.g) : undefined,
+      sourceLabel: srcLabel, sourceId: String(f.i), group: f.g ? this.groups.get(f.g) : undefined,
       per100,
-      portions: (f.o ?? []).map(([label, amount, unit, g]) => ({ label, amount, unit, gram_weight: g, source: f.s === 'F' ? 'USDA Foundation' : 'USDA SR Legacy', value_type: 'sourced' as ValueType })),
+      portions: (f.o ?? []).map(([label, amount, unit, g]) => ({ label, amount, unit, gram_weight: g, source: srcLabel, value_type: 'sourced' as ValueType })),
       waterLike: /^Beverages, (water|tea|coffee)|^Water, /i.test(f.e) && !/powder|instant, dry|dry powder/i.test(f.e),
       note: f.n,
+      refuse: f.r ? { pct: f.r[0], desc: f.r[1] } : undefined,
     };
     this.views.set(id, view); return view;
   }
@@ -83,27 +95,45 @@ export class Reference {
     return (this.byBase.get(f.b) ?? []).filter(x => x !== id).map(x => this.get(x)!).slice(0, 12);
   }
 
-  search(query: string, limit = 40): FoodView[] {
-    const q = normalize(query); if (!q) return [];
-    const toks = q.split(' ');
-    const scored: [number, number][] = [];
-    for (const k of this.keys) {
-      let s = 0; let ok = true;
-      for (const t of toks) {
-        const i = k.key.indexOf(t);
-        if (i < 0) { ok = false; break; }
-        s += 1; if (i === 0 || k.key.charCodeAt(i - 1) === 32) s += 2;
-        if (k.tr && k.tr.includes(t)) s += 3;
-        if (k.tr && k.tr.startsWith(t)) s += 3;
-      }
-      if (!ok) continue;
-      if (k.exact.length) { if (k.exact.includes(q)) s += 12; else if (k.exact[0].startsWith(q)) s += 4; }
-      s += k.boost - k.key.length / 200;
-      scored.push([s, k.id]);
-    }
-    scored.sort((a, b) => b[0] - a[0]);
-    return scored.slice(0, limit).map(([, id]) => this.get(id)!);
+  /** FNDDS coffee drink: the same drink with each milk type present in FNDDS (empty when there is only one). */
+  milkVariants(id: number): { food: FoodView; milk: MilkType }[] {
+    const f = this.raw.get(id); if (!f || f.s !== 'N') return [];
+    const g = this.milkGroups.get(milkVariant(f.e).key) ?? [];
+    return g.length > 1 ? g.map(x => ({ food: this.get(x.id)!, milk: x.milk })) : [];
   }
+
+  /** Exact USDA description lookup (case-insensitive). */
+  byDesc(desc: string): FoodView | undefined { const id = this.descIdx.get(desc.toLowerCase()); return id == null ? undefined : this.get(id); }
+
+  /**
+   * Turkish-aware multi-word search: every word may match the Turkish name, the English name, its English translation
+   * (tavuk -> chicken) or, for preparation words, the food's preparation (haşlanmış -> boiled/stewed/simmered).
+   * Foods matching every word rank first; when none does, the nearest partial matches are returned and lastPartial is set.
+   */
+  search(query: string, limit = 40): FoodView[] {
+    const fb = SEARCH_FALLBACK[normalize(query)];
+    if (fb) { const r = this.searchCore(fb.q, limit); this.lastPartial = true; this.lastNote = fb.note; return r; }
+    this.lastNote = null;
+    return this.searchCore(query, limit);
+  }
+  private searchCore(query: string, limit: number): FoodView[] {
+    const terms = parseQuery(query); const q = normalize(query);
+    this.lastPartial = false;
+    if (!terms.length) return [];
+    const full: [number, number][] = [], part: [number, number, number][] = [];
+    for (const { id, d } of this.docs) {
+      const r = scoreDoc(terms, d, q); if (!r.matched) continue;
+      if (r.matched === terms.length) full.push([r.score, id]);
+      else if (terms.length > 1 && terms.some(t => !t.prep)) part.push([r.matched, r.score, id]);
+    }
+    full.sort((a, b) => b[0] - a[0]);
+    if (full.length) return full.slice(0, limit).map(([, id]) => this.get(id)!);
+    // nothing matches every word: nearest = most words matched, at least one food word
+    this.lastPartial = part.length > 0;
+    part.sort((a, b) => b[0] - a[0] || b[1] - a[1]);
+    return part.slice(0, limit).map(([, , id]) => this.get(id)!);
+  }
+
 }
 
 let refPromise: Promise<Reference> | null = null;

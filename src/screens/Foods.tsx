@@ -77,8 +77,8 @@ export function Foods() {
       </div>
       <div className="fadd" onClick={e => e.stopPropagation()}>
         <input className="input num d-only" inputMode="decimal" value={amt[key] ?? '100'} onChange={e => setAmt(a => ({ ...a, [key]: e.target.value }))} aria-label="Gram" /><span className="u d-only">g</span>
-        <button className="btn sm d-only" onClick={() => setLog({ f, a: parseNum(amt[key] ?? '100') || 100 })}><I.plus width={15} /> Ekle</button>
-        <button className="icon-btn boxed m-only" aria-label="Ekle" onClick={() => setLog({ f, a: 100 })}><I.plus width={20} /></button>
+        <button className="btn sm d-only" onClick={() => setLog({ f, a: amt[key] ? parseNum(amt[key]) || undefined : undefined })}><I.plus width={15} /> Ekle</button>
+        <button className="icon-btn boxed m-only" aria-label="Ekle" onClick={() => setLog({ f })}><I.plus width={20} /></button>
       </div>
     </div>;
   };

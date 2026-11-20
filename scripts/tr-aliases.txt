@@ -125,7 +125,7 @@ Zencefil, taze | ginger root, raw
 # Sebzeler (pişmiş)
 Patates, haşlanmış | potatoes, boiled, cooked in skin, flesh, without salt
 Patates, fırında | potatoes, baked, flesh and skin, without salt
-Patates kızartması | 169264
+Patates kızartması; kızarmış patates | 169264
 Patates püresi | potatoes, mashed, home-prepared, whole milk and butter added
 Tatlı patates, fırında | sweet potato, cooked, baked in skin, flesh, without salt
 Brokoli, haşlanmış | broccoli, cooked, boiled, drained, without salt
@@ -253,6 +253,9 @@ Tavuk but, derili, çiğ | chicken, broilers or fryers, thigh, meat and skin, ra
 Tavuk kanat, çiğ; tavuk kanat | chicken, broilers or fryers, wing, meat and skin, raw
 Tavuk kanat, fırında | chicken, broilers or fryers, wing, meat and skin, cooked, roasted
 Tavuk ciğeri | chicken, liver, all classes, raw
+Tavuk, haşlanmış; haşlanmış tavuk; tavuk haşlama | !Chicken, broilers or fryers, meat only, cooked, stewed
+Tavuk göğsü, haşlanmış | !Chicken, broilers or fryers, breast, meat only, cooked, stewed
+Tavuk göğsü, tavada | !Chicken, broilers or fryers, breast, meat only, cooked, fried
 Hindi göğsü, çiğ; hindi | turkey, whole, breast, meat only, raw
 Hindi kıyma, çiğ | turkey, ground, raw
 Dana kıyma %85 yağsız, çiğ; dana kıyma; kıyma | beef, ground, 85% lean meat / 15% fat, raw
@@ -352,3 +355,45 @@ Soya sosu | soy sauce made from soy and wheat (shoyu)
 Kabartma tozu | leavening agents, baking powder, double-acting, sodium aluminum sulfate
 Kuru maya; maya | leavening agents, yeast, baker's, active dry
 Jelatin, toz | gelatins, dry powder, unsweetened
+# Kahve içecekleri (USDA FNDDS)
+Latte; latte; sütlü kahve; kafe latte | !Coffee, Latte
+Latte, yağsız süt | !Coffee, Latte, nonfat
+Latte, bitkisel süt | !Coffee, Latte, with non-dairy milk
+Latte, şuruplu (aromalı); şurup ekli latte | !Coffee, Latte, flavored
+Latte, yağsız süt, şuruplu | !Coffee, Latte, nonfat, flavored
+Latte, bitkisel süt, şuruplu | !Coffee, Latte, with non-dairy milk, flavored
+Buzlu latte; ice latte; iced latte; soğuk latte | !Coffee, Iced Latte
+Buzlu latte, yağsız süt | !Coffee, Iced Latte, nonfat
+Buzlu latte, bitkisel süt | !Coffee, Iced Latte, with non-dairy milk
+Buzlu latte, şuruplu (aromalı) | !Coffee, Iced Latte, flavored
+Buzlu latte, yağsız süt, şuruplu | !Coffee, Iced Latte, nonfat, flavored
+Buzlu latte, bitkisel süt, şuruplu | !Coffee, Iced Latte, with non-dairy milk, flavored
+Kapuçino; cappuccino; kapuçino | !Coffee, Cappuccino
+Kapuçino, yağsız süt | !Coffee, Cappuccino, nonfat
+Kapuçino, bitkisel süt | !Coffee, Cappuccino, with non-dairy milk
+Mocha; kafe mocha; moka | !Coffee, Cafe Mocha
+Mocha, yağsız süt | !Coffee, Cafe Mocha, nonfat
+Mocha, bitkisel süt | !Coffee, Cafe Mocha, with non-dairy milk
+Buzlu mocha; ice mocha; iced mocha | !Coffee, Iced Cafe Mocha
+Buzlu mocha, yağsız süt | !Coffee, Iced Cafe Mocha, nonfat
+Buzlu mocha, bitkisel süt | !Coffee, Iced Cafe Mocha, with non-dairy milk
+Espresso; espresso | !Coffee, espresso
+Espresso, kafeinsiz | !Coffee, espresso, decaffeinated
+Macchiato; makiato | !Coffee, macchiato
+Macchiato, şekerli | !Coffee, macchiato, sweetened
+Frappe (buzlu blend kahve); frappe; frappuccino | !Frozen coffee drink
+Frappe, yağsız süt | !Frozen coffee drink, nonfat
+Frappe, bitkisel süt | !Frozen coffee drink, with non-dairy milk
+Frappe, krem şantili | !Frozen coffee drink, with whipped cream
+Mocha frappe; mocha frappuccino | !Frozen mocha coffee drink
+Mocha frappe, krem şantili | !Frozen mocha coffee drink, with whipped cream
+Filtre kahve; filtre kahve; sade kahve | !Coffee, brewed
+Filtre kahve, kafeinsiz | !Coffee, brewed, decaffeinated
+Soğuk kahve (buzlu filtre); buzlu kahve; iced coffee | !Iced Coffee, brewed
+Buzlu kahve, sütlü ve şekerli | !Iced Coffee, pre-lightened and pre-sweetened
+Türk kahvesi (şekerli, FNDDS tarifi); türk kahvesi | !Coffee, Turkish
+Sütlü kahve, şekerli | !Coffee, pre-lightened and pre-sweetened with sugar
+Kahve, şekerli | !Coffee, pre-sweetened with sugar
+Hazır kahve (granül, suyla) | !Coffee, instant, reconstituted
+Hazır kahve 3'ü 1 arada | !Coffee, instant, pre-lightened and pre-sweetened with sugar, reconstituted
+Café con leche | !Coffee, cafe con leche
