@@ -10,6 +10,7 @@ import { Badge, fmt, Modal, NumberInput, Seg } from './kit';
 import { NutrientTable, useResolve, CalibrateInline } from './food';
 import { CookCalculator } from './CookCalculator';
 import { I } from './icons';
+import { DishInfo } from './DishInfo';
 
 export function guessMeal(d = new Date()): Meal {
   const h = d.getHours(); return h < 11 ? 'breakfast' : h < 16 ? 'lunch' : h < 21 ? 'dinner' : 'snack';
@@ -104,7 +105,7 @@ export function LogSheet({ food: initial, date, meal: initMeal, amount: a0, unit
     repo.addLog(sv.db, {
       datetime: dt, meal, food_id: food.id, entered_amount: sized ? count as number : amount as number, entered_unit: enteredUnit(),
       grams, grams_value_type: gType, snapshot: { name: food.name, source: food.sourceLabel, kind: food.kind, per100: food.per100, prep: food.prep },
-      note: mode === 'egg' ? `${EGG_NOTE}: ${eggCls} ≈${eggDef.shellG} g kabuklu, USDA kabuk %${eggRefuse}` : mode === 'size' && sizeOpt ? `USDA porsiyonu: ${sizeOpt.portionLabel} = ${fmt(sizeOpt.grams, 1)} g` : withBone && refuse !== '' ? `Kemik/atık %${refuse} düşüldü` : null,
+      note: mode === 'egg' ? `${EGG_NOTE}: ${eggCls} ≈${eggDef.shellG} g kabuklu, USDA kabuk %${eggRefuse}` : mode === 'size' && sizeOpt ? `${food.dish ? sizeOpt.source : 'USDA porsiyonu'}: ${sizeOpt.portionLabel} = ${fmt(sizeOpt.grams, 1)} g` : withBone && refuse !== '' ? `Kemik/atık %${refuse} düşüldü` : null,
     });
     // remember the chosen size as next default (personal DB)
     if (mode === 'egg') repo.setSetting(sv.db, 'size:egg', eggCls);
@@ -220,6 +221,7 @@ export function LogSheet({ food: initial, date, meal: initMeal, amount: a0, unit
           <label className="f">Saat<input className="input" type="time" value={time} onChange={e => setTime(e.target.value)} /></label>
         </div>
         {food.note && <div className="tiny muted">Not: {food.note}</div>}
+        <DishInfo f={food} />
         <NutrientTable per100={food.per100} amount={n} grams={grams} codes={sv.ref.coreCodes()} gramsType={gType} />
         <div className="row between">
           <div className="row">

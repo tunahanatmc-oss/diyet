@@ -1,10 +1,12 @@
 import type { NutrientProfile, PrepState, ValueType, Portion } from '../engine';
-import { normalize, parseQuery, scoreDoc, milkVariant, SEARCH_FALLBACK, type SearchDoc, type MilkType } from '../engine';
+import { normalize, parseQuery, scoreDoc, milkVariant, SEARCH_FALLBACK, computeDish, DISH_SOURCE, type SearchDoc, type MilkType, type DishDef, type DishResult } from '../engine';
+import { TURKISH_DISHES } from './dishes';
 
 export interface NutrientDef { code: string; name_tr: string; name_en: string; unit: string; usda: number; core: number }
 export interface RefFoodRaw { i: number; b: number; p: PrepState; e: string; s: 'F' | 'S' | 'N'; g: number | null; v: (number | null)[]; q: string; t?: string[]; o?: [string, number, string, number][]; n?: string; r?: [number, string] }
 export interface ReferenceData { meta: any; nutrients: NutrientDef[]; groups: { id: number; name_en: string }[]; foods: RefFoodRaw[] }
 
+const DISH_ID_MIN = 900_000_000;
 export type FoodSource = 'usda_foundation' | 'usda_sr_legacy' | 'usda_fndds' | 'user' | 'label' | 'off' | 'recipe' | 'turkomp_personal';
 
 /** Unified food view used by the UI and services: reference (read-only) or custom (personal DB). */
@@ -28,6 +30,8 @@ export interface FoodView {
   barcode?: string;
   /** inedible part of the food as purchased (USDA SR Legacy refuse), e.g. egg shell 12 % */
   refuse?: { pct: number; desc: string };
+  /** ready-made Turkish dish (system recipe computed from USDA ingredients) */
+  dish?: { def: DishDef; result: DishResult };
 }
 
 export const PREP_TR: Record<string, string> = {
@@ -52,7 +56,7 @@ export class Reference {
   private byBase: Map<number, number[]> = new Map();
   private milkGroups: Map<string, { id: number; milk: MilkType }[]> = new Map();
 
-  constructor(data: ReferenceData) {
+  constructor(data: ReferenceData, dishes: DishDef[] = TURKISH_DISHES) {
     this.nutrients = data.nutrients; this.meta = data.meta;
     this.groups = new Map(data.groups.map(g => [g.id, g.name_en]));
     for (const f of data.foods) {
@@ -64,6 +68,21 @@ export class Reference {
       this.byBase.get(f.b)!.push(f.i);
       if (f.s === 'N') { const mv = milkVariant(f.e); if (!this.milkGroups.has(mv.key)) this.milkGroups.set(mv.key, []); this.milkGroups.get(mv.key)!.push({ id: f.i, milk: mv.milk }); }
     }
+    for (const d of dishes) this.addDish(d);
+  }
+  /** Ready-made dishes: nutrients computed by the recipe engine from the USDA ingredients (engine/dishes.ts). */
+  dishIds: number[] = [];
+  private addDish(def: DishDef) {
+    let result: DishResult;
+    try { result = computeDish(def, desc => this.byDesc(desc), this.codes()); } catch (e) { console.warn(e); return; }
+    const names = [def.name_tr, ...def.aliases];
+    const view: FoodView = {
+      id: def.id, kind: 'ref', name: def.name_tr, name_en: def.name_en, aliases: names, prep: 'prepared', base: null, source: 'recipe',
+      sourceLabel: DISH_SOURCE, group: 'Hazır yemek', per100: result.per100, portions: result.portions, waterLike: false, dish: { def, result },
+    };
+    this.views.set(def.id, view);
+    this.dishIds.push(def.id);
+    this.docs.push({ id: def.id, d: { tr: names.map(normalize).join(' '), en: normalize(def.name_en), prep: 'prepared', exact: names.map(normalize), boost: 12 } });
   }
   get size() { return this.raw.size; }
   codes() { return this.nutrients.map(n => n.code); }
@@ -124,7 +143,7 @@ export class Reference {
     for (const { id, d } of this.docs) {
       const r = scoreDoc(terms, d, q); if (!r.matched) continue;
       if (r.matched === terms.length) full.push([r.score, id]);
-      else if (terms.length > 1 && terms.some(t => !t.prep)) part.push([r.matched, r.score, id]);
+      else if (terms.length > 1 && terms.some(t => !t.prep)) part.push([r.matched, r.score - (id >= DISH_ID_MIN && id < 1_000_000_000 ? 20 : 0), id]); // nearest: plain foods before dishes
     }
     full.sort((a, b) => b[0] - a[0]);
     if (full.length) return full.slice(0, limit).map(([, id]) => this.get(id)!);

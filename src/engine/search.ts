@@ -147,5 +147,4 @@ export function scoreDoc(terms: QueryTerm[], d: SearchDoc, qNorm: string): { sco
 export const SEARCH_FALLBACK: Record<string, { q: string; note: string }> = {
   americano: { q: 'espresso', note: 'USDA FNDDS’te “americano” kaydı yok. Americano = espresso + sıcak su (su 0 kcal): espresso’yu shot sayısıyla kaydedin.' },
   'flat white': { q: 'latte', note: 'USDA FNDDS’te “flat white” kaydı yok. En yakın: latte (flat white’ta süt daha az, değerler biraz düşük olur).' },
-  'mercimek corbasi': { q: 'lentil soup', note: 'USDA’da Türk usulü mercimek çorbası yok. En yakın: ABD konserve mercimek çorbaları (içerik farklı). Tarif olarak kendiniz oluşturabilirsiniz.' },
 };

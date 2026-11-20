@@ -22,11 +22,9 @@ describe('Turkish multi-word search on the real reference DB', () => {
   it('"HAŞLANMIŞ YUMURTA" / "haslanmis yumurta" (case, accents) give the same', () => {
     expect(top('HAŞLANMIŞ YUMURTA')[0].id).toBe(top('haslanmis yumurta')[0].id);
   });
-  it('"pilav" -> cooked rice', () => expect(top('pilav')[0].name_en).toMatch(/^Rice, .*cooked/));
-  it('"mercimek çorbası": USDA has no Turkish lentil soup; nearest lentil soups are returned', () => {
-    const r = top('mercimek çorbası', 5);
-    expect(r.length).toBeGreaterThan(0);
-    expect(r[0].name_en).toMatch(/soup.*lentil|lentil.*soup/i);
+  it('"pilav" -> ready-made pirinç pilavı first, cooked rice right after', () => {
+    const r = top('pilav', 5); expect(r[0].name).toBe('Pirinç pilavı');
+    expect(r.some(f => /^Rice, .*cooked/.test(f.name_en))).toBe(true);
   });
   it('English words still work, unknown words fall back to nearest partial', () => {
     expect(top('banana')[0].name_en).toMatch(/^Bananas/);

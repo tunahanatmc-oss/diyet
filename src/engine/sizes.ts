@@ -22,15 +22,17 @@ export interface SizeGroup { key: string; label_tr: string; options: SizeOption[
 
 const VOLUME_UNITS = new Set(['cup', 'tbsp', 'tsp', 'floz']);
 // nouns that just mean "one whole item" — dropped from the group key so 'Potato large' and 'large' share a group
-const WHOLE_NOUNS = new Set(['whole', 'fruit', 'each', 'potato', 'melon', 'pepper', 'artichoke', 'pita', 'link', 'piece', 'item', 'egg', 'eggs', 'thick', 'thin', 'nlea']);
+const WHOLE_NOUNS = new Set(['adet', 'whole', 'fruit', 'each', 'potato', 'melon', 'pepper', 'artichoke', 'pita', 'link', 'piece', 'item', 'egg', 'eggs', 'thick', 'thin', 'nlea']);
 const GROUP_TR: Record<string, string> = {
-  '': 'Adet (bütün)', head: 'Baş (bütün)', leaf: 'Yaprak', slice: 'Dilim', wedge: 'Kama dilim', stalk: 'Sap', spear: 'Filiz',
+  '': 'Adet (bütün)', kase: 'Kase', tabak: 'Tabak', head: 'Baş (bütün)', leaf: 'Yaprak', slice: 'Dilim', wedge: 'Kama dilim', stalk: 'Sap', spear: 'Filiz',
   pot: 'Demlik', ear: 'Koçan', strip: 'Çubuk', drink: 'İçecek', package: 'Paket', box: 'Kutu', sausage: 'Sosis', bunch: 'Demet', clove: 'Diş', floret: 'Çiçek',
 };
 
 /** Size level of a portion label (text in parentheses ignored, e.g. 'cup (4.86 large eggs)' has no size). */
+/** Turkish size words used by the ready-made dishes ("orta kase") -> the English words below. */
+const trSize = (label: string) => (' ' + label.toLowerCase() + ' ').replace(/ küçük /g, ' small ').replace(/ orta /g, ' medium ').replace(/ büyük /g, ' large ').trim();
 export function parseSizeLevel(label: string): SizeLevel | null {
-  const t = label.toLowerCase().replace(/\([^)]*\)/g, ' ');
+  const t = trSize(label).replace(/\([^)]*\)/g, ' ');
   if (/\bextra[\s-]*small\b/.test(t)) return 'xs';
   if (/\bextra[\s-]*large\b/.test(t)) return 'xl';
   if (/\bjumbo\b/.test(t)) return 'jumbo';
@@ -42,7 +44,7 @@ export function parseSizeLevel(label: string): SizeLevel | null {
 
 /** Group key: the label without sizes, parentheses, punctuation and "whole item" nouns ('head, large' -> 'head'). */
 export function sizeGroupKey(label: string): string {
-  const t = label.toLowerCase().replace(/\([^)]*\)/g, ' ').replace(/\b(extra[\s-]*small|extra[\s-]*large|small|medium|large|jumbo|yields|whole)\b/g, ' ')
+  const t = trSize(label).replace(/\([^)]*\)/g, ' ').replace(/\b(extra[\s-]*small|extra[\s-]*large|small|medium|large|jumbo|yields|whole)\b/g, ' ')
     .replace(/[^a-zçğıöşü ]+/g, ' ');
   return t.split(/\s+/).filter(w => w && !WHOLE_NOUNS.has(w)).map(w => w.replace(/s$/, '')).join(' ');
 }

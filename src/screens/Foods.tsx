@@ -8,6 +8,7 @@ import { per100FromServing, nutrientsFor, type ValueType, type PrepState } from 
 import { Badge, fmt, fmtN, Modal, NumberInput, Seg, parseNum } from '../ui/kit';
 import { FoodPicker, NutrientTable, CalibrateInline } from '../ui/food';
 import { LogSheet } from '../ui/LogSheet';
+import { DishInfo } from '../ui/DishInfo';
 import { I } from '../ui/icons';
 import { fetchOff, offToFood } from '../integrations/off';
 import { decodeImageFile, decodeVideoFrame, hasNativeDetector } from '../integrations/barcode';
@@ -152,6 +153,7 @@ function FoodPanel({ f, onLog, onOpen, onFav }: { f: FoodView; onLog: () => void
       <div className="row between nowrap" style={{ alignItems: 'flex-end' }}><h2>{f.name}</h2>
         <div style={{ textAlign: 'right', flex: 'none' }}><div className="tiny" style={{ color: 'var(--ink-2)' }}>Enerji</div><b style={{ fontSize: 26, color: 'var(--accent)' }}>{fmt(kc)}</b><span className="small muted">/100g</span></div></div>
     </div>
+    <DishInfo f={f} />
     {sibs.length > 0 && <div className="tile" style={{ marginTop: 14 }}>
       <div className="row nowrap" style={{ gap: 10 }}><I.swap width={18} style={{ color: 'var(--accent)' }} /><b className="small">Aynı besinin diğer halleri</b><span className="chip neutral" style={{ marginLeft: 'auto' }}>{sibs.length}</span></div>
       <div className="tiny" style={{ color: 'var(--ink-2)', marginTop: 8, lineHeight: 1.6 }}>{sibs.slice(0, 3).map(s => `${cap(PREP_TR[s.prep] ?? s.prep)}: ${fmt(s.per100.energy_kcal?.value)} kcal`).join(' · ')}. Çiğ↔pişmiş çevrim için kendi tartımını Mutfak’ta kullan.</div></div>}
@@ -186,10 +188,11 @@ export function FoodDetail({ food: f0, onClose, onEdit }: { food: FoodView; onCl
     <Modal title={food.name} onClose={onClose} wide>
       <div className="col">
         <div className="row small"><span className="chip neutral">{PREP_TR[food.prep]}</span><span className="chip vt-sourced">{food.sourceLabel}</span>
-          {food.sourceId && <span className="muted">{food.kind === 'ref' ? 'FDC #' : 'Barkod '}{food.sourceId}</span>}{food.group && <span className="muted">· {food.group}</span>}</div>
+          {food.sourceId && !food.dish && <span className="muted">{food.kind === 'ref' ? 'FDC #' : 'Barkod '}{food.sourceId}</span>}{food.group && <span className="muted">· {food.group}</span>}</div>
         {food.kind === 'ref' && food.name !== food.name_en && <div className="small muted">{food.name_en}</div>}
         {food.aliases.length > 1 && <div className="tiny muted">Diğer adlar: {food.aliases.slice(1).join(', ')}</div>}
         {food.note && <div className="tiny muted">{food.note}</div>}
+        <DishInfo f={food} open />
         <div className="row"><span className="small muted">Göster:</span>
           <select className="input" style={{ maxWidth: 320 }} value={portion} onChange={e => setPortion(+e.target.value)}>
             <option value={-1}>yalnızca 100 g</option>{food.portions.map((p, i) => <option key={i} value={i}>{p.label} = {fmt(p.gram_weight, 1)} g</option>)}

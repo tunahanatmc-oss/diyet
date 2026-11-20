@@ -14,3 +14,4 @@ export * from './plan';
 export * from './sizes';
 export * from './eggs';
 export * from './drinks';
+export * from './dishes';
